@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="id"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio - MT SDH United Tractors</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'DM Sans', sans-serif; scroll-behavior: smooth; }
+    .fade-up { opacity: 0; transform: translateY(24px); transition: all 0.5s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .section-pop { position: relative; overflow: hidden; }
+    .geo-shape { position: absolute; pointer-events: none; animation: float ease-in-out infinite; }
+    .geo-shape:nth-child(1) { animation-duration: 4s; }
+    .geo-shape:nth-child(2) { animation-duration: 5s; animation-delay: 0.5s; }
+    .geo-shape:nth-child(3) { animation-duration: 4.5s; animation-delay: 1s; }
+    .geo-shape:nth-child(4) { animation-duration: 6s; animation-delay: 0.2s; }
+    .geo-shape:nth-child(5) { animation-duration: 5.5s; animation-delay: 0.8s; }
+    .geo-shape:nth-child(6) { animation-duration: 4.2s; animation-delay: 0.3s; }
+    .geo-shape:nth-child(7) { animation-duration: 5.8s; animation-delay: 1.2s; }
+    .geo-shape:nth-child(8) { animation-duration: 4.8s; animation-delay: 0.6s; }
+    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
+    .modal-overlay { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); align-items: flex-start; justify-content: center; padding: 1rem; overflow-y: auto; padding-top: max(1rem, calc(50vh - 300px)); }
+    .modal-overlay.active { display: flex; animation: fadeIn 0.25s ease; }
+    .modal-content { background: white; border-radius: 1.25rem; max-width: 600px; width: 100%; max-height: 85vh; overflow-y: auto; box-shadow: 0 30px 60px rgba(0,0,0,0.3); }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    .clickable-card { cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+    .clickable-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.12); }
+    .slider-container { position: relative; overflow: hidden; border-radius: 1rem 1rem 0 0; }
+    .slider-track { display: flex; transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94); }
+    .slider-track img { min-width: 100%; height: auto; object-fit: cover; }
+    .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: background 0.2s; z-index: 5; }
+    .slider-btn:hover { background: #fff; }
+    .slider-btn.prev { left: 10px; }
+    .slider-btn.next { right: 10px; }
+    .slider-dots { display: flex; gap: 6px; justify-content: center; padding: 10px 0; }
+    .slider-dot { width: 8px; height: 8px; border-radius: 50%; background: #d1d5db; cursor: pointer; transition: background 0.2s, transform 0.2s; }
+    .slider-dot.active { background: #ff4d8d; transform: scale(1.3); }
+    .cert-modal-header { background: linear-gradient(135deg, #1A237E, #311B92); padding: 1.25rem 1.5rem; border-radius: 0 0 0 0; }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { 'pop-pink': '#FF4D8D', 'pop-teal': '#00BCD4', 'pop-green': '#4CAF50', 'pop-blue': '#2196F3', 'pop-yellow': '#FFD600', 'pop-navy': '#1A237E', 'pop-light': '#FAFBFF' } } }
+    }
+  </script>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/resizing_sdk.js" type="text/javascript"></script>
+ <script src="/_sdk/telemetry_sdk.js"></script></head>
+ <body data-template-id="__page-root" class="w-full" style="background: rgb(255, 255, 255);">
+  <!-- Navigation -->
+  <nav class="fixed top-0 w-full bg-white z-50" style="border-bottom: 2px solid #1A1F4C;">
+   <div class="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
+    <span data-template-id="nav-brand" class="canva-text font-bold text-lg" style="color: rgb(26, 35, 126); font-weight: 700;">Management Trainee - SDH Portfolio</span>
+    <div class="hidden md:flex gap-6 text-sm font-semibold">
+     <a href="#hero" class="text-gray-700 hover:text-pop-pink transition">Home</a> <a href="#education" class="text-gray-700 hover:text-pop-pink transition">Education</a> <a href="#projects" class="text-gray-700 hover:text-pop-pink transition">Projects</a> <a href="#skills" class="text-gray-700 hover:text-pop-pink transition">Skills</a> <a href="#certifications" class="text-gray-700 hover:text-pop-pink transition">Certifications</a> <a href="#leadership" class="text-gray-700 hover:text-pop-pink transition">Leadership</a>
+    </div>
+   </div>
+  </nav><!-- Hero Section -->
+  <header id="hero" class="w-full pt-28 pb-20 px-6 section-pop bg-white" style="background-image: linear-gradient(rgba(173,216,230,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(173,216,230,0.15) 1px, transparent 1px); background-size: 40px 40px;">
+   <div class="geo-shape w-8 h-8 rounded-full bg-pop-pink top-24 left-[8%] absolute"></div>
+   <div class="geo-shape w-5 h-5 rounded-full bg-pop-green top-32 left-[25%] absolute"></div>
+   <div class="geo-shape w-6 h-6 rounded-full bg-pop-yellow top-20 right-[12%] absolute"></div>
+   <div class="geo-shape w-4 h-4 rounded-full bg-pop-teal top-40 right-[25%] absolute"></div>
+   <div class="geo-shape w-10 h-10 rounded-sm bg-pop-blue/30 rotate-12 bottom-24 left-[15%] absolute"></div>
+   <div class="geo-shape w-6 h-6 rounded-sm bg-pop-pink/40 -rotate-6 bottom-16 right-[18%] absolute"></div>
+   <div class="geo-shape w-5 h-5 rounded-full bg-pop-yellow/60 bottom-32 left-[40%] absolute"></div>
+   <div class="geo-shape w-3 h-3 rounded-full bg-pop-teal top-48 left-[60%] absolute"></div>
+   <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-14 items-center relative z-10">
+    <div class="fade-up">
+     <p data-template-id="hero-greeting" class="canva-text text-sm font-semibold mb-2" style="color: rgb(26, 35, 126); font-weight: 600; font-size: 12px;">HALO, SAYA</p>
+     <div class="relative inline-block">
+      <h1 data-template-id="hero-name" class="canva-text font-extrabold leading-tight" style="color: rgb(26, 31, 76); font-weight: 800; font-size: 44px;">Fajar Hidayat</h1>
+      <div data-template-id="hero-underline" class="h-1 rounded-full mt-2" style="width: 45%; background: rgb(255, 77, 141);"></div>
+     </div>
+     <p data-template-id="hero-tagline" class="canva-text mt-5 leading-relaxed" style="color: rgb(51, 56, 67); font-size: 17px;">ADM Service → Future Service Department Head | Mengoptimalkan Working Capital &amp; Efisiensi Operasional Alat Berat melalui Integrasi Teknologi &amp; IT Background</p>
+     <div class="mt-8 flex flex-wrap gap-4">
+      <a href="#projects" data-template-id="hero-cta" class="canva-button inline-block px-8 py-3 rounded-full font-bold transition hover:scale-105 hover:shadow-xl shadow-lg" style="background: rgb(255, 77, 141); color: rgb(255, 255, 255); font-weight: 700;">Lihat Kontribusi Saya</a> <a href="https://drive.google.com/drive/folders/1_H_F3QjWHhIbmpnXBD-7oX3iCFuBPqNS?usp=sharing" target="_blank" rel="noopener noreferrer" data-template-id="hero-cta2" class="canva-button inline-block px-8 py-3 rounded-full font-bold transition hover:scale-105 border-2" style="background: transparent; color: rgb(51, 56, 67); font-weight: 700;">Download CV</a>
+     </div>
+    </div>
+    <div class="relative flex items-center justify-center fade-up">
+     <div class="absolute w-72 h-72 md:w-80 md:h-80 border-4 border-pop-teal rounded-full"></div>
+     <div class="absolute w-56 h-56 md:w-64 md:h-64 bg-pop-pink/5 rounded-full -translate-x-4 translate-y-6"></div><img data-template-id="profile-photo" class="canva-image relative z-10 w-60 h-60 md:w-72 md:h-72 rounded-full object-cover shadow-xl border-4 border-white" loading="lazy" src="Fajar.jpeg" alt="WhatsApp Image 2026-03-05 at 11.22.33.jpg">
+    </div>
+   </div>
+  </header><!-- Stats Bar -->
+  <section class="w-full py-12 section-pop" style="background: linear-gradient(90deg, #0D47A1, #1A237E);">
+   <div class="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center fade-up relative z-10">
+    <div><span data-template-id="stat1-number" class="canva-text font-extrabold block" style="color: rgb(255, 214, 0); font-weight: 800; font-size: 36px;">3.86</span><span data-template-id="stat1-label" class="canva-text text-sm mt-1 block" style="color: rgba(255, 255, 255, 0.8);">IPK Cumlaude (S1)</span>
+    </div>
+    <div><span data-template-id="stat2-number" class="canva-text font-extrabold block" style="color: rgb(255, 77, 141); font-weight: 800; font-size: 36px;">≤9 Hari</span><span data-template-id="stat2-label" class="canva-text text-sm mt-1 block" style="color: rgba(255, 255, 255, 0.8);">Target Lead Time Invoice</span>
+    </div>
+    <div><span data-template-id="stat3-number" class="canva-text font-extrabold block" style="color: rgb(76, 175, 80); font-weight: 800; font-size: 36px;">90%</span><span data-template-id="stat3-label" class="canva-text text-sm mt-1 block" style="color: rgba(255, 255, 255, 0.8);">Data Accuracy Man Hours</span>
+    </div>
+    <div><span data-template-id="stat4-number" class="canva-text font-extrabold block" style="color: rgb(0, 188, 212); font-weight: 800; font-size: 36px;">100+</span><span data-template-id="stat4-label" class="canva-text text-sm mt-1 block" style="color: rgba(255, 255, 255, 0.8);">Anggota GDSC Dipimpin</span>
+    </div>
+   </div>
+  </section><!-- About Section -->
+  <section class="w-full py-20 section-pop" style="background: #FAFBFF;">
+   <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-14 items-center fade-up relative z-10">
+    <div>
+     <h2 data-template-id="about-title" class="canva-text font-bold" style="color: rgb(26, 35, 126); font-weight: 700; font-size: 24px;">Tentang Saya</h2>
+     <p data-template-id="about-text" class="canva-text mt-5 leading-relaxed" style="color: rgb(75, 85, 99);">Profesional 23 tahun lulusan Teknik Informatika (IPK Cumlaude) dengan rekam jejak mengelola siklus finansial operasional dan Working Capital di Service Department United Tractors, Site Buhut, Kalimantan Tengah. Mengombinasikan keandalan proses administrasi berbasis SAP dengan logika berpikir teknologi untuk mendorong inovasi dan efisiensi di industri alat berat. Pengalaman riset UX membentuk Customer-Centric Mindset yang memperkuat akurasi pengelolaan database service dan koordinasi tim mekanik.</p>
+    </div><img data-template-id="about-img" class="canva-image w-full h-72 object-cover rounded-2xl shadow-xl" loading="lazy" src="about me.png" alt="Confident man with tablet in a modern, dimly lit office setting">
+   </div>
+  </section><!-- Education Section -->
+  <section id="education" class="w-full py-20 section-pop" style="background: linear-gradient(160deg, #E8F5E9, #E0F7FA);">
+   <div class="max-w-6xl mx-auto px-6 relative z-10">
+    <h2 data-template-id="edu-title" class="canva-text font-bold text-center mb-14" style="color: rgb(26, 35, 126); font-weight: 700; font-size: 24px;">Pendidikan Formal</h2>
+    <div class="grid md:grid-cols-2 gap-8">
+     <div data-template-id="edu-card-1" class="canva-card rounded-2xl p-8 shadow-md fade-up border-l-4 border-pop-pink" style="background: rgb(255, 255, 255);">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 bg-pop-pink rounded-lg flex items-center justify-center"><i data-lucide="graduation-cap" class="w-5 h-5 text-white"></i>
+       </div><span data-template-id="edu1-degree" class="canva-text font-bold" style="color: rgb(255, 77, 141); font-weight: 700;">S1 Teknik Informatika</span>
+      </div>
+      <h3 data-template-id="edu1-univ" class="canva-text font-semibold" style="color: rgb(26, 35, 126); font-weight: 600; font-size: 19px;">Universitas Lambung Mangkurat (ULM), Banjarmasin</h3>
+      <p data-template-id="edu1-gpa" class="canva-text font-bold mt-1" style="color: rgb(255, 77, 141); font-weight: 700;">IPK: 3.86 / 4.00 (Cumlaude)</p>
+      <p data-template-id="edu1-courses" class="canva-text mt-3 text-sm leading-relaxed" style="color: rgb(75, 85, 99);">Mata Kuliah Relevan: Programming &amp; Algorithm, Big Data, UI Design, Artificial Intelligence, Software Development.</p>
+      <p data-template-id="edu1-thesis" class="canva-text mt-2 text-sm italic" style="color: rgb(107, 114, 128);">Skripsi: Pengembangan, Adaptasi, dan Validasi Tourism App Usability Questionnaire (TAUQ).</p>
+     </div>
+     <div data-template-id="edu-card-2" class="canva-card rounded-2xl p-8 shadow-md fade-up border-l-4 border-pop-teal" style="background: rgb(255, 255, 255);">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-10 h-10 bg-pop-teal rounded-lg flex items-center justify-center"><i data-lucide="award" class="w-5 h-5 text-white"></i>
+       </div><span data-template-id="edu2-degree" class="canva-text font-bold" style="color: rgb(0, 188, 212); font-weight: 700;">Program Pertukaran PMM 2</span>
+      </div>
+      <h3 data-template-id="edu2-univ" class="canva-text font-semibold" style="color: rgb(26, 35, 126); font-weight: 600; font-size: 19px;">Universitas AMIKOM Yogyakarta</h3>
+      <p data-template-id="edu2-gpa" class="canva-text font-bold mt-1" style="color: rgb(0, 188, 212); font-weight: 700;">IPK: 4.00 / 4.00 (Sempurna)</p>
+      <p data-template-id="edu2-courses" class="canva-text mt-3 text-sm leading-relaxed" style="color: rgb(75, 85, 99);">Mata Kuliah Relevan: Programming &amp; Algorithm, Big Data, UI Design, Artificial Intelligence.</p><a href="https://drive.google.com/drive/folders/YOUR-FOLDER-ID" target="_blank" rel="noopener noreferrer" data-template-id="edu2-doc-link" class="canva-link inline-block mt-4 text-sm hover:underline" style="color: rgb(0, 188, 212); font-weight: 600;">View Dokumen</a>
+     </div>
+    </div>
+   </div>
+  </section><!-- Work Experience Section -->
+  <section id="experience" class="w-full py-20 section-pop" style="background: #FAFBFF;">
+   <div class="max-w-6xl mx-auto px-6 relative z-10">
+    <h2 data-template-id="exp-title" class="canva-text font-bold text-center mb-14" style="color: rgb(26, 35, 126); font-weight: 700; font-size: 24px;">Pengalaman Kerja</h2>
+    <div class="grid md:grid-cols-5 gap-10 mb-14 fade-up">
+     <div class="md:col-span-3">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-11 h-11 bg-pop-green rounded-xl flex items-center justify-center"><i data-lucide="hard-hat" class="w-5 h-5 text-white"></i>
+       </div>
+       <div>
+        <h3 data-template-id="exp1-role" class="canva-text font-bold" style="color: rgb(26, 35, 126); font-weight: 700; font-size: 20px;">ADM Service</h3>
+        <p data-template-id="exp1-company" class="canva-text text-sm" style="color: rgb(107, 114, 128);">United Tractors — Buhut, Kalimantan Tengah | Sept 2025 – Sekarang</p>
+       </div>
+      </div>
+      <p data-template-id="exp1-desc" class="canva-text mt-4 leading-relaxed" style="color: rgb(75, 85, 99);">Mendukung operasional Service Department dengan fokus pengelolaan data akurat (Work Order, Service Report, Spare Parts Request) di SAP. Mengontrol siklus penagihan end-to-end dengan target Lead Time ≤ 9 hari. Menyusun Cost Budgeting PMP (Labour, Part, Overhead) dan mengawal utilisasi jam kerja mekanik via MTC Mobile. Bertanggung jawab atas dokumentasi strategis dan MoM acara berskala site.</p>
+     </div>
+     <div class="md:col-span-2">
+      <img data-template-id="exp1-img" class="canva-image w-full h-52 object-cover rounded-xl shadow-lg" loading="lazy" src="ADM.jpeg" alt="Engineers performing maintenance on construction equipment in an industrial workshop setting">
+     </div>
+    </div>
+    <div class="grid md:grid-cols-5 gap-10 fade-up">
+     <div class="md:col-span-2 md:order-1">
+      <img data-template-id="exp2-img" class="canva-image w-full h-52 object-cover rounded-xl shadow-lg" loading="lazy" src="yhc.jpg" alt="A neat workspace featuring a sketchpad with wireframes, a smartphone, and a keyboard on a wooden desk">
+     </div>
+     <div class="md:col-span-3 md:order-2">
+      <div class="flex items-center gap-3 mb-4">
+       <div class="w-11 h-11 bg-pop-blue rounded-xl flex items-center justify-center"><i data-lucide="pen-tool" class="w-5 h-5 text-white"></i>
+       </div>
+       <div>
+        <h3 data-template-id="exp2-role" class="canva-text font-bold" style="color: rgb(26, 35, 126); font-weight: 700; font-size: 20px;">Intern — UI/UX Designer &amp; User Researcher</h3>
+        <p data-template-id="exp2-company" class="canva-text text-sm" style="color: rgb(107, 114, 128);">Hasnur Centre — Barito Kuala, Kalsel | Mar – Jun 2024</p>
+       </div>
+      </div>
+      <p data-template-id="exp2-desc" class="canva-text mt-4 leading-relaxed" style="color: rgb(75, 85, 99);">Berkontribusi dalam 15+ proyek pengembangan aplikasi web &amp; mobile. Memimpin riset mendalam untuk memetakan User Requirements dan menyusun User Flow efisien. Merancang arsitektur informasi dari Low-Fidelity hingga desain final. Pengalaman ini membentuk Customer-Centric Mindset yang menjadi fondasi kelancaran koordinasi tim mekanik dan penanganan Customer Call di United Tractors.</p><a href="https://dribbble.com/fajarlumine" target="_blank" rel="noopener noreferrer" data-template-id="exp2-project-link" class="canva-link inline-block mt-4 text-sm hover:underline" style="color: rgb(255, 77, 141); font-weight: 600;">My Project</a>
+     </div>
+    </div>
+   </div>
+  </section><!-- Projects Section -->
+  <section id="projects" class="w-full py-20 section-pop" style="background: linear-gradient(160deg, #1A237E, #0D47A1);">
+   <div class="max-w-6xl mx-auto px-6 relative z-10">
+    <h2 data-template-id="projects-title" class="canva-text font-bold text-center mb-3" style="color: rgb(255, 255, 255); font-weight: 700; font-size: 24px;">Proyek &amp; Kontribusi Strategis</h2>
+    <p data-template-id="projects-subtitle" class="canva-text text-center mb-14 max-w-2xl mx-auto" style="color: rgba(255, 255, 255, 0.8);">Inisiatif yang berdampak langsung pada efisiensi operasional dan profitabilitas site.</p>
+    <div class="grid md:grid-cols-2 gap-7">
+     <div data-template-id="proj1-card" class="canva-card rounded-xl p-7 fade-up border-t-4 border-pop-pink h-64 clickable-card relative" onclick="openModal('popup-proj1')" style="background: rgb(255, 255, 255);">
+      <div class="w-11 h-11 bg-pop-pink rounded-lg flex items-center justify-center mb-4"><i data-lucide="wallet" class="w-5 h-5 text-white"></i>
+      </div>
+      <h3 data-template-id="proj1-title" class="canva-text font-bold text-sm" style="color: rgb(26, 35, 126); font-weight: 700; font-size: 18px;">Manajemen Working Capital &amp; Robust Process</h3>
+      <p data-template-id="proj1-desc" class="canva-text mt-2 text-xs leading-relaxed line-clamp-3" style="color: rgb(75, 85, 99);">Mengontrol siklus penagihan end-to-end (billing → diterima customer) dengan target Lead Time ≤ 9 hari. Mengelola mitigasi risiko piutang macet melalui SAP, memastikan cash flow operasional site tetap sehat.</p>
+      <div class="mt-3 flex gap-4 text-xs">
+       <div class="text-center"><span data-template-id="proj1-kpi1-value" class="canva-text font-bold block text-base" style="color: rgb(255, 77, 141); font-weight: 700; font-size: 22px;">92%</span><span data-template-id="proj1-kpi1-label" class="canva-text text-xs" style="color: rgb(107, 114, 128); font-size: 10px;">On-time Process</span>
+       </div>
+       <div class="text-center"><span data-template-id="proj1-kpi2-value" class="canva-text font-bold block text-base" style="color: rgb(255, 77, 141); font-weight: 700; font-size: 22px;">85%</span><span data-template-id="proj1-kpi2-label" class="canva-text text-xs" style="color: rgb(107, 114, 128); font-size: 10px;">AR Collection</span>
+       </div>
+      </div><button data-template-id="proj1-more" class="canva-link absolute bottom-3 right-4 text-xs font-semibold hover:underline" style="color: rgb(26, 35, 126); font-weight: 600;">More</button>
+     </div>
+     <div data-template-id="proj2-card" class="canva-card rounded-xl p-7 fade-up border-t-4 border-pop-teal h-64 clickable-card relative" onclick="openModal('popup-proj2')" style="background: rgb(255, 255, 255);">
+      <div class="w-11 h-11 bg-pop-teal rounded-lg flex items-center justify-center mb-4"><i data-lucide="wrench" class="w-5 h-5 text-white"></i>
+      </div>
+      <h3 data-template-id="proj2-title" class="canva-text font-bold text-sm" style="color: rgb(26, 35, 126); font-weight: 700; font-size: 18px;">Preventive Maintenance Package &amp; Man Hours</h3>
+      <p data-template-id="proj2-desc" class="canva-text mt-2 text-xs leading-relaxed line-clamp-3" style="color: rgb(75, 85, 99);">Menyusun Cost Budgeting tanggungan Jasa/Part/Overhead untuk program PMP. Mengawal utilisasi jam kerja mekanik via MTC Mobile, menjaga validitas data Job Availability dan produktivitas tim lapangan secara real-time.</p>
+      <div class="mt-3 text-xs">
+       <div class="text-center inline-block"><span data-template-id="proj2-kpi1-value" class="canva-text font-bold block text-base" style="color: rgb(0, 188, 212); font-weight: 700; font-size: 22px;">90%</span><span data-template-id="proj2-kpi1-label" class="canva-text text-xs" style="color: rgb(107, 114, 128); font-size: 10px;">Data Accuracy</span>
+       </div>
+      </div><button data-template-id="proj2-more" class="canva-link absolute bottom-3 right-4 text-xs font-semibold hover:underline" style="color: rgb(26, 35, 126); font-weight: 600;">More</button>
+     </div>
+     <div data-template-id="proj3-card" class="canva-card rounded-xl p-7 fade-up border-t-4 border-pop-green h-64 clickable-card relative" onclick="openModal('popup-proj3')" style="background: rgb(255, 255, 255);">
+      <div class="w-11 h-11 bg-pop-green rounded-lg flex items-center justify-center mb-4"><i data-lucide="file-text" class="w-5 h-5 text-white"></i>
+      </div>
+      <h3 data-template-id="proj3-title" class="canva-text font-bold text-sm" style="color: rgb(26, 35, 126); font-weight: 700; font-size: 18px;">Dokumentasi Strategis &amp; MoM</h3>
+      <p data-template-id="proj3-desc" class="canva-text mt-2 text-xs leading-relaxed line-clamp-4" style="color: rgb(75, 85, 99);">Bertanggung jawab penuh atas dokumentasi resmi operasional (Minutes of Meeting) acara berskala site/branch. Memastikan akuntabilitas keputusan manajemen terdokumentasi dan actionable untuk seluruh stakeholder.</p><button data-template-id="proj3-more" class="canva-link absolute bottom-3 right-4 text-xs font-semibold hover:underline" style="color: rgb(26, 35, 126); font-weight: 600;">More</button>
+     </div>
+     <div class="rounded-xl overflow-hidden fade-up shadow-lg h-64">
+      <img data-template-id="proj-showcase-img" class="canva-image w-full h-full object-cover" loading="lazy" src="Project.jpeg" alt="Businessman reviewing data analytics dashboard on laptop in bright office">
+     </div>
+    </div>
+   </div>
+  </section><!-- Skills Section -->
+  <section id="skills" class="w-full py-20 section-pop" style="background: linear-gradient(160deg, #FCE4EC 0%, #E0F7FA 100%);">
+   <div class="max-w-6xl mx-auto px-6 relative z-10">
+    <h2 data-template-id="skills-title" class="canva-text font-bold text-center mb-14" style="color: rgb(26, 35, 126); font-weight: 700; font-size: 24px;">Kompetensi &amp; Tools</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+     <div data-template-id="skill-card-1" class="canva-card rounded-xl p-7 border border-gray-100 shadow-sm hover:shadow-lg transition fade-up clickable-card" onclick="openModal('popup-skill1')" style="background: rgb(255, 255, 255);">
+      <div class="w-10 h-10 bg-pop-pink rounded-lg flex items-center justify-center mb-4"><i data-lucide="settings" class="w-5 h-5 text-white"></i>
+      </div>
+      <h4 data-template-id="skill1-title" class="canva-text font-bold mb-2" style="color: rgb(26, 35, 126); font-weight: 700;">Service &amp; Reman Business Process</h4>
+      <p data-template-id="skill1-desc" class="canva-text text-sm leading-relaxed" style="color: rgb(107, 114, 128);">Alur transaksi Reman (KCRR/UTR), Good Receive Policy, Warranty Contract, inventory management. Memahami ekosistem service alat berat secara menyeluruh.</p>
+     </div>
+     <div data-template-id="skill-card-2" class="canva-card rounded-xl p-7 border border-gray-100 shadow-sm hover:shadow-lg transition fade-up clickable-card" onclick="openModal('popup-skill2')" style="background: rgb(255, 255, 255);">
+      <div class="w-10 h-10 bg-pop-teal rounded-lg flex items-center justify-center mb-4"><i data-lucide="bar-chart-3" class="w-5 h-5 text-white"></i>
+      </div>
+      <h4 data-template-id="skill2-title" class="canva-text font-bold mb-2" style="color: rgb(26, 35, 126); font-weight: 700;">Finansial &amp; Compliance</h4>
+      <p data-template-id="skill2-desc" class="canva-text text-sm leading-relaxed" style="color: rgb(107, 114, 128);">P&amp;L Analysis per transaksi, kredit via Permata Quick Cash, kepatuhan pajak (E-Faktur &amp; PPh 23). Orientasi pada efisiensi biaya operasional.</p>
+     </div>
+     <div data-template-id="skill-card-3" class="canva-card rounded-xl p-7 border border-gray-100 shadow-sm hover:shadow-lg transition fade-up clickable-card" onclick="openModal('popup-skill3')" style="background: rgb(255, 255, 255);">
+      <div class="w-10 h-10 bg-pop-green rounded-lg flex items-center justify-center mb-4"><i data-lucide="monitor" class="w-5 h-5 text-white"></i>
+      </div>
+      <h4 data-template-id="skill3-title" class="canva-text font-bold mb-2" style="color: rgb(26, 35, 126); font-weight: 700;">Tools &amp; Teknologi</h4>
+      <p data-template-id="skill3-desc" class="canva-text text-sm leading-relaxed" style="color: rgb(107, 114, 128);">SAP ERP (Service/Parts), Advanced Excel untuk dashboard WO/JIP monitoring, Figma/Adobe XD untuk UI/UX problem-solving dan visualisasi proses.</p>
+     </div>
+    </div>
+   </div>
+  </section><!-- Certifications Section -->
+  <section id="certifications" class="w-full py-20 section-pop" style="background: linear-gradient(160deg, #1A237E, #311B92);">
+   <div class="max-w-6xl mx-auto px-6 relative z-10">
+    <h2 data-template-id="cert-title" class="canva-text font-bold text-center mb-14" style="color: rgb(255, 255, 255); font-weight: 700; font-size: 24px;">Sertifikasi &amp; Training</h2>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+     <div data-template-id="cert-card-1" class="canva-card rounded-xl p-6 border-l-4 border-l-pop-pink border border-white/10 hover:border-white/20 transition fade-up clickable-card" onclick="openModal('popup-cert1')" style="background: rgb(30, 27, 75);">
+      <div class="w-8 h-8 bg-pop-pink rounded-md flex items-center justify-center mb-3"><i data-lucide="badge-check" class="w-4 h-4 text-white"></i>
+      </div>
+      <h4 data-template-id="cert1-name" class="canva-text font-semibold text-sm" style="color: rgb(255, 255, 255); font-weight: 600;">Foundations of User Experience (UX) Design</h4>
+      <p data-template-id="cert1-issuer" class="canva-text text-xs mt-1" style="color: rgba(255, 255, 255, 0.667);">Google Career Certificates via Coursera — 2024</p>
+     </div>
+     <div data-template-id="cert-card-2" class="canva-card rounded-xl p-6 border-l-4 border-l-pop-teal border border-white/10 hover:border-white/20 transition fade-up clickable-card" onclick="openModal('popup-cert2')" style="background: rgb(30, 27, 75);">
+      <div class="w-8 h-8 bg-pop-teal rounded-md flex items-center justify-center mb-3"><i data-lucide="badge-check" class="w-4 h-4 text-white"></i>
+      </div>
+      <h4 data-template-id="cert2-name" class="canva-text font-semibold text-sm" style="color: rgb(255, 255, 255); font-weight: 600;">UI/UX Design Mastery (Gold Certification)</h4>
+      <p data-template-id="cert2-issuer" class="canva-text text-xs mt-1" style="color: rgba(255, 255, 255, 0.667);">Skilvul — 2024</p>
+     </div>
+     <div data-template-id="cert-card-3" class="canva-card rounded-xl p-6 border-l-4 border-l-pop-green border border-white/10 hover:border-white/20 transition fade-up clickable-card" onclick="openModal('popup-cert3')" style="background: rgb(30, 27, 75);">
+      <div class="w-8 h-8 bg-pop-green rounded-md flex items-center justify-center mb-3"><i data-lucide="badge-check" class="w-4 h-4 text-white"></i>
+      </div>
+      <h4 data-template-id="cert3-name" class="canva-text font-semibold text-sm" style="color: rgb(255, 255, 255); font-weight: 600;">Learn Basic Project Management</h4>
+      <p data-template-id="cert3-issuer" class="canva-text text-xs mt-1" style="color: rgba(255, 255, 255, 0.667);">Dicoding — 2023</p>
+     </div>
+     <div data-template-id="cert-card-4" class="canva-card rounded-xl p-6 border-l-4 border-l-pop-yellow border border-white/10 hover:border-white/20 transition fade-up clickable-card" onclick="openModal('popup-cert4')" style="background: rgb(30, 27, 75);">
+      <div class="w-8 h-8 bg-pop-yellow rounded-md flex items-center justify-center mb-3"><i data-lucide="badge-check" class="w-4 h-4 text-pop-navy"></i>
+      </div>
+      <h4 data-template-id="cert4-name" class="canva-text font-semibold text-sm" style="color: rgb(255, 255, 255); font-weight: 600;">Learn Basic Web Programming</h4>
+      <p data-template-id="cert4-issuer" class="canva-text text-xs mt-1" style="color: rgba(255, 255, 255, 0.667);">Dicoding — 2022</p>
+     </div>
+     <div data-template-id="cert-card-5" class="canva-card rounded-xl p-6 border-l-4 border-l-pop-blue border border-white/10 hover:border-white/20 transition fade-up clickable-card" onclick="openModal('popup-cert5')" style="background: rgb(30, 27, 75);">
+      <div class="w-8 h-8 bg-pop-blue rounded-md flex items-center justify-center mb-3"><i data-lucide="badge-check" class="w-4 h-4 text-white"></i>
+      </div>
+      <h4 data-template-id="cert5-name" class="canva-text font-semibold text-sm" style="color: rgb(255, 255, 255); font-weight: 600;">Learn Basic UX Design</h4>
+      <p data-template-id="cert5-issuer" class="canva-text text-xs mt-1" style="color: rgba(255, 255, 255, 0.667);">Dicoding — 2023</p>
+     </div>
+     <div data-template-id="cert-card-6" class="canva-card rounded-xl p-6 border-l-4 border-l-pop-pink border border-white/10 hover:border-white/20 transition fade-up clickable-card" onclick="openModal('popup-cert6')" style="background: rgb(30, 27, 75);">
+      <div class="w-8 h-8 bg-pop-pink rounded-md flex items-center justify-center mb-3"><i data-lucide="badge-check" class="w-4 h-4 text-white"></i>
+      </div>
+      <h4 data-template-id="cert6-name" class="canva-text font-semibold text-sm" style="color: rgb(255, 255, 255); font-weight: 600;">Getting Started with Basic Programming to Become a Software Developer</h4>
+      <p data-template-id="cert6-issuer" class="canva-text text-xs mt-1" style="color: rgba(255, 255, 255, 0.667);">Dicoding — 2023</p>
+     </div>
+    </div>
+   </div>
+  </section><!-- Leadership Section -->
+  <section id="leadership" class="w-full py-20 section-pop" style="background: #FAFBFF;">
+   <div class="max-w-6xl mx-auto px-6 fade-up relative z-10">
+    <div class="grid md:grid-cols-2 gap-14 items-center">
+     <div>
+      <h2 data-template-id="leadership-title" class="canva-text font-bold mb-6" style="color: rgb(26, 35, 126); font-weight: 700; font-size: 24px;">Leadership &amp; Organisasi</h2>
+      <p data-template-id="leadership-desc" class="canva-text leading-relaxed" style="color: rgb(75, 85, 99);">Sebagai Lead Google Developer Student Clubs (GDSC) ULM 2023–2024, memimpin 100+ anggota dalam eksekusi proyek teknologi, koordinasi multi-tim, dan public speaking. Mengorganisasi peer-to-peer learning, merancang solusi digital untuk komunitas lokal, serta memberikan mentoring. Pengalaman ini membangun fondasi kepemimpinan untuk mengelola tim mekanik dan memastikan alignment terhadap target operasional sebagai SDH.</p>
+      <div class="mt-6 flex flex-wrap gap-3">
+       <span data-template-id="lead-tag-1" class="canva-tag px-4 py-2 rounded-full text-sm font-semibold" style="background: rgb(255, 77, 141); color: rgb(255, 255, 255); font-weight: 600;">Team Management</span> <span data-template-id="lead-tag-2" class="canva-tag px-4 py-2 rounded-full text-sm font-semibold" style="background: rgb(0, 188, 212); color: rgb(255, 255, 255); font-weight: 600;">Project Coordination</span> <span data-template-id="lead-tag-3" class="canva-tag px-4 py-2 rounded-full text-sm font-semibold" style="background: rgb(76, 175, 80); color: rgb(255, 255, 255); font-weight: 600;">Public Speaking</span> <span data-template-id="lead-tag-4" class="canva-tag px-4 py-2 rounded-full text-sm font-semibold" style="background: rgb(255, 214, 0); color: rgb(26, 35, 126); font-weight: 600;">Mentoring</span>
+      </div>
+     </div><img data-template-id="leadership-img" class="canva-image w-full h-72 object-cover rounded-2xl shadow-xl" loading="lazy" src="GDSC.jpg" alt="Diverse team delivering a digital presentation in a modern office environment">
+    </div>
+   </div>
+  </section><!-- Contact Footer -->
+  <footer id="contact" class="w-full py-20 section-pop" style="background: linear-gradient(135deg, #0D1B5E, #1A237E);">
+   <div class="max-w-4xl mx-auto px-6 text-center fade-up relative z-10">
+    <h2 data-template-id="contact-title" class="canva-text font-bold mb-4" style="color: rgb(255, 255, 255); font-weight: 700; font-size: 24px;">Mari Terhubung</h2>
+    <p data-template-id="contact-text" class="canva-text mb-8" style="color: rgba(255, 255, 255, 0.867);">Saya terbuka untuk berdiskusi tentang peluang kepemimpinan operasional di United Tractors.</p>
+    <div class="flex flex-wrap items-center justify-center gap-8">
+     <a href="mailto:fajarwork007@gmail.com" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 hover:opacity-80 transition"><i data-lucide="mail" class="w-6 h-6 text-pop-pink"></i><p data-template-id="contact-email" class="canva-text font-semibold" style="color: rgb(255, 214, 0); font-weight: 600; font-size: 10px;">fajarwork007@gmail.com</p></a> <a href="https://www.instagram.com/fajarhdyat_/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 hover:opacity-80 transition"><i data-lucide="instagram" class="w-6 h-6 text-pop-pink"></i><p data-template-id="contact-instagram" class="canva-text font-semibold" style="color: rgb(255, 214, 0); font-weight: 600; font-size: 10px;">@fajarhdyt_</p></a> <a href="https://linkedin.com/in/fajarhidayat007" target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 hover:opacity-80 transition"><i data-lucide="linkedin" class="w-6 h-6 text-pop-blue"></i><p data-template-id="contact-linkedin" class="canva-text font-semibold" style="color: rgb(255, 214, 0); font-weight: 600; font-size: 10px;">Fajar Hidayat</p></a>
+    </div>
+   </div>
+  </footer><!-- PROJECT MODALS -->
+  <div class="modal-overlay" id="popup-proj1" onclick="closeModalBackdrop(event)">
+   <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="relative">
+     <img data-template-id="popup-proj1-img" class="canva-image w-full h-48 object-cover rounded-t-xl" loading="lazy" src="https://images.pexels.com/photos/7681091/pexels-photo-7681091.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Team collaborating on financial documents with graphs and statistics in an office setting"> <button onclick="closeModal('popup-proj1')" class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition"><i data-lucide="x" class="w-4 h-4 text-gray-700"></i></button>
+    </div>
+    <div class="p-6">
+     <h3 data-template-id="popup-proj1-title" class="canva-text font-bold mb-3" style="color: rgb(26, 35, 126); font-weight: 700; font-size: 20px;">Manajemen Working Capital &amp; Robust Process</h3>
+     <p data-template-id="popup-proj1-desc" class="canva-text text-sm leading-relaxed" style="color: rgb(75, 85, 99); font-size: 13px;">* Mengontrol siklus penagihan end-to-end mulai dari pembuatan invoice hingga diterima oleh customer dengan target Lead Time ≤ 9 hari.
+* Memastikan kelengkapan dan validitas dokumen pendukung, termasuk Service Report dan Work Order (WO) Closure.
+* Mengelola proses pengiriman invoice serta melakukan konfirmasi penerimaan kepada customer.
+* Melakukan monitoring dan mitigasi risiko piutang melalui sistem SAP untuk menjaga kesehatan cash flow operasional site.
+* Berkoordinasi dengan tim Finance Pusat dalam pengelolaan Account Receivable (AR) dan pemantauan aging piutang.
+* Memastikan AR aging tetap dalam batas yang sehat serta meminimalkan potensi bad debt.
+* Mendukung kelancaran proses penagihan dan peningkatan efektivitas pengelolaan keuangan operasional.
+</p>
+    </div>
+   </div>
+  </div>
+  <div class="modal-overlay" id="popup-proj2" onclick="closeModalBackdrop(event)">
+   <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="relative">
+     <img data-template-id="popup-proj2-img" class="canva-image w-full h-48 object-cover rounded-t-xl" loading="lazy" src="https://images.pexels.com/photos/4489749/pexels-photo-4489749.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Mechanic examining car's undercarriage at a garage, focusing on vehicle maintenance"> <button onclick="closeModal('popup-proj2')" class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition"><i data-lucide="x" class="w-4 h-4 text-gray-700"></i></button>
+    </div>
+    <div class="p-6">
+     <h3 data-template-id="popup-proj2-title" class="canva-text font-bold mb-3" style="color: rgb(26, 35, 126); font-weight: 700; font-size: 20px;">Preventive Maintenance Package &amp; Man Hours</h3>
+     <p data-template-id="popup-proj2-desc" class="canva-text text-sm leading-relaxed" style="color: rgb(75, 85, 99);">* Menyusun dan mengelola cost budgeting untuk komponen Jasa, Part, dan Overhead pada program PMP.
+* Memantau utilisasi jam kerja mekanik melalui MTC Mobile untuk memastikan produktivitas tim lapangan berjalan optimal.
+* Menjaga akurasi dan validitas data Job Availability serta pencatatan aktivitas kerja secara real-time.
+* Memastikan setiap jam kerja mekanik terdokumentasi dengan akurat sebagai dasar perhitungan cost per unit.
+* Melakukan monitoring efisiensi tenaga kerja melalui analisis data produktivitas dan utilisasi manpower.
+* Menyediakan data dan laporan operasional yang mendukung pengambilan keputusan manajemen terkait kebutuhan tenaga kerja.
+* Mendukung pengendalian biaya operasional dan peningkatan efektivitas sumber daya manusia di lapangan.
+</p>
+    </div>
+   </div>
+  </div>
+  <div class="modal-overlay" id="popup-proj3" onclick="closeModalBackdrop(event)">
+   <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="relative">
+     <img data-template-id="popup-proj3-img" class="canva-image w-full h-48 object-cover rounded-t-xl" loading="lazy" src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Overhead view of a diverse team in a business meeting using laptops and tablets"> <button onclick="closeModal('popup-proj3')" class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition"><i data-lucide="x" class="w-4 h-4 text-gray-700"></i></button>
+    </div>
+    <div class="p-6">
+     <h3 data-template-id="popup-proj3-title" class="canva-text font-bold mb-3" style="color: rgb(26, 35, 126); font-weight: 700; font-size: 20px;">Dokumentasi Strategis &amp; MoM </h3>
+     <p data-template-id="popup-proj3-desc" class="canva-text text-sm leading-relaxed" style="color: rgb(75, 85, 99);">* Bertanggung jawab atas penyusunan dan pengelolaan dokumentasi resmi operasional dalam bentuk Minutes of Meeting (MoM) untuk kegiatan tingkat site dan branch.
+* Memastikan seluruh keputusan, arahan, dan hasil rapat terdokumentasi secara akurat, jelas, dan dapat ditindaklanjuti.
+* Berkoordinasi dengan berbagai departemen untuk memantau pelaksanaan action item yang telah disepakati.
+* Melakukan monitoring progres tindak lanjut serta memastikan setiap target dan deadline terpenuhi sesuai rencana.
+* Mendukung akuntabilitas dan transparansi proses pengambilan keputusan manajemen melalui dokumentasi yang terstruktur.
+* Menyediakan laporan dan catatan rapat yang menjadi referensi bagi stakeholder dalam pelaksanaan kegiatan operasional.
+</p>
+    </div>
+   </div>
+  </div><!-- SKILL MODALS -->
+  <div class="modal-overlay" id="popup-skill1" onclick="closeModalBackdrop(event)">
+   <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="relative">
+     <img data-template-id="popup-skill1-img" class="canva-image w-full h-48 object-cover rounded-t-xl" loading="lazy" src="https://images.pexels.com/photos/15071423/pexels-photo-15071423.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Yellow Hyundai excavator operating in a rocky quarry under a clear blue sky"> <button onclick="closeModal('popup-skill1')" class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition"><i data-lucide="x" class="w-4 h-4 text-gray-700"></i></button>
+    </div>
+    <div class="p-6">
+     <h3 data-template-id="popup-skill1-title" class="canva-text font-bold mb-3" style="color: rgb(26, 35, 126); font-weight: 700; font-size: 20px;">Service &amp; Reman Business Process</h3>
+     <p data-template-id="popup-skill1-desc" class="canva-text text-sm leading-relaxed" style="color: rgb(75, 85, 99);">Memahami secara mendalam alur transaksi Reman (KCRR/UTR), Good Receive Policy, Warranty Contract, dan inventory management. Menguasai ekosistem service alat berat dari penerimaan unit, diagnosa kerusakan, pengadaan spare parts, eksekusi perbaikan, hingga serah terima unit ke customer. Kemampuan ini memungkinkan pengambilan keputusan cepat dalam situasi urgent breakdown.</p>
+    </div>
+   </div>
+  </div>
+  <div class="modal-overlay" id="popup-skill2" onclick="closeModalBackdrop(event)">
+   <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="relative">
+     <img data-template-id="popup-skill2-img" class="canva-image w-full h-48 object-cover rounded-t-xl" loading="lazy" src="https://images.pexels.com/photos/8636589/pexels-photo-8636589.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="A professional workspace featuring computers and analytical graphs on a monitor"> <button onclick="closeModal('popup-skill2')" class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition"><i data-lucide="x" class="w-4 h-4 text-gray-700"></i></button>
+    </div>
+    <div class="p-6">
+     <h3 data-template-id="popup-skill2-title" class="canva-text font-bold mb-3" style="color: rgb(26, 35, 126); font-weight: 700; font-size: 20px;">Finansial &amp; Compliance</h3>
+     <p data-template-id="popup-skill2-desc" class="canva-text text-sm leading-relaxed" style="color: rgb(75, 85, 99);">Menguasai P&amp;L Analysis per transaksi, pengelolaan kredit via Permata Quick Cash, dan kepatuhan pajak (E-Faktur &amp; PPh 23). Orientasi pada efisiensi biaya operasional dengan memastikan setiap transaksi tercatat akurat dan compliant terhadap regulasi perpajakan yang berlaku.</p>
+    </div>
+   </div>
+  </div>
+  <div class="modal-overlay" id="popup-skill3" onclick="closeModalBackdrop(event)">
+   <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="relative">
+     <img data-template-id="popup-skill3-img" class="canva-image w-full h-48 object-cover rounded-t-xl" loading="lazy" src="https://images.pexels.com/photos/270348/pexels-photo-270348.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Colorful PHP code displayed on a dark screen, ideal for programming themes"> <button onclick="closeModal('popup-skill3')" class="absolute top-3 right-3 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition"><i data-lucide="x" class="w-4 h-4 text-gray-700"></i></button>
+    </div>
+    <div class="p-6">
+     <h3 data-template-id="popup-skill3-title" class="canva-text font-bold mb-3" style="color: rgb(26, 35, 126); font-weight: 700; font-size: 20px;">Tools &amp; Teknologi</h3>
+     <p data-template-id="popup-skill3-desc" class="canva-text text-sm leading-relaxed" style="color: rgb(75, 85, 99);">Mahir menggunakan SAP ERP (modul Service/Parts) untuk pengelolaan data operasional harian. Advanced Excel untuk pembuatan dashboard monitoring Work Order dan Job in Progress. Figma/Adobe XD untuk UI/UX problem-solving dan visualisasi proses bisnis yang kompleks menjadi alur yang mudah dipahami stakeholder.</p>
+    </div>
+   </div>
+  </div><!-- CERTIFICATION MODALS with Image Sliders --> <!-- Cert 1 Modal -->
+  <div class="modal-overlay" id="popup-cert1" onclick="closeModalBackdrop(event)">
+   <div class="modal-content max-w-5xl" onclick="event.stopPropagation()"><button onclick="closeModal('popup-cert1')" class="absolute top-3 right-3 z-20 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition"><i data-lucide="x" class="w-4 h-4 text-gray-700"></i></button>
+    <div class="grid md:grid-cols-2 gap-0">
+     <div class="flex flex-col bg-gradient-to-br from-blue-50 to-white">
+      <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-7">
+       <h3 data-template-id="popup-cert1-title" class="canva-text font-bold text-lg mb-1 text-white" style="color: rgb(255, 255, 255); font-weight: 700; font-size: 18px;">Foundations of User Experience (UX) Design</h3>
+       <p data-template-id="popup-cert1-issuer" class="canva-text text-xs text-blue-100" style="color: rgba(219, 234, 254, 0.933);">Google Career Certificates via Coursera — 2024</p>
+      </div>
+      <div class="flex-1 px-8 py-7 flex flex-col justify-between">
+       <div>
+        <p data-template-id="popup-cert1-desc" class="canva-text text-sm leading-relaxed mb-6" style="color: rgb(51, 65, 85);">Sertifikasi Google Career Certificates melalui Coursera (2024) membekali saya dengan dasar-dasar UX Design, meliputi user research, wireframing, prototyping, dan usability testing. Kompetensi ini mendukung kemampuan analisis kebutuhan pengguna, pemecahan masalah, serta perancangan solusi yang efektif untuk meningkatkan efisiensi proses dan pengalaman pengguna.</p>
+       </div>
+       <div class="flex flex-wrap gap-2">
+        <span data-template-id="cert1-skill-1" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(255, 77, 141); color: rgb(255, 255, 255); font-weight: 600;">User Research</span> <span data-template-id="cert1-skill-2" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(33, 150, 243); color: rgb(255, 255, 255); font-weight: 600;">Wireframing</span> <span data-template-id="cert1-skill-3" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(0, 188, 212); color: rgb(255, 255, 255); font-weight: 600;">Prototyping</span>
+       </div>
+      </div>
+     </div>
+     <div class="flex flex-col">
+      <div class="relative bg-gray-100" style="aspect-ratio: 16/9;">
+       <div class="slider-container h-full" data-slider="">
+        <div class="slider-track h-full">
+         <img data-template-id="cert1-slide-1" class="canva-image w-full h-full object-cover" loading="lazy" src="Foundations of User Experience (UX) Design.jpeg" alt="Person having video call with tutor through internet on netbook while studying"> <img data-template-id="cert1-slide-2" class="canva-image w-full h-full object-cover" loading="lazy" src="Foundations of User Experience (UX) Design2.png" alt="Close-up of a notebook with wireframe sketches and a smartphone on a wooden desk"> <img data-template-id="cert1-slide-3" class="canva-image w-full h-full object-cover" loading="lazy" src="Foundations of User Experience (UX) Design3.jpg" alt="Group of designers collaborating in modern office space with computer">
+        </div><button class="slider-btn prev" onclick="slideNav(this,-1)"><i data-lucide="chevron-left" class="w-4 h-4"></i></button> <button class="slider-btn next" onclick="slideNav(this,1)"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+       </div>
+       <div class="slider-dots absolute bottom-4 left-0 right-0" data-dots=""></div>
+      </div>
+      <div class="flex gap-3 p-6 bg-white" data-thumbnails=""><img data-template-id="cert1-slide-1" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,0)" src="Foundations of User Experience (UX) Design.jpeg" alt="Person having video call with tutor through internet on netbook while studying"> <img data-template-id="cert1-slide-2" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,1)" src="Foundations of User Experience (UX) Design2.png" alt="Close-up of a notebook with wireframe sketches and a smartphone on a wooden desk"> <img data-template-id="cert1-slide-3" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,2)" src="Foundations of User Experience (UX) Design3.jpg" alt="Group of designers collaborating in modern office space with computer">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Cert 2 Modal -->
+  <div class="modal-overlay" id="popup-cert2" onclick="closeModalBackdrop(event)">
+   <div class="modal-content max-w-5xl" onclick="event.stopPropagation()"><button onclick="closeModal('popup-cert2')" class="absolute top-3 right-3 z-20 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition"><i data-lucide="x" class="w-4 h-4 text-gray-700"></i></button>
+    <div class="grid md:grid-cols-2 gap-0">
+     <div class="flex flex-col bg-gradient-to-br from-indigo-50 to-white">
+      <div class="bg-gradient-to-r from-pink-500 to-rose-500 px-8 py-6">
+       <h3 data-template-id="popup-cert2-title" class="canva-text font-bold text-lg mb-1 text-white" style="color: rgb(255, 255, 255); font-weight: 700; font-size: 18px;">UI/UX Design Mastery (Gold Certification)</h3>
+       <p data-template-id="popup-cert2-issuer" class="canva-text text-xs text-pink-100" style="color: rgb(224, 231, 255);">Skilvul — 2024</p>
+      </div>
+      <div class="flex-1 px-8 py-6 flex flex-col justify-between">
+       <div>
+        <p data-template-id="popup-cert2-desc" class="canva-text text-sm leading-relaxed mb-6" style="color: rgb(51, 65, 85);">Sertifikasi Gold dari Skilvul (2024) membekali saya dengan pemahaman mengenai proses desain end-to-end, mulai dari riset pengguna, pembuatan wireframe dan prototipe, hingga pengembangan design system. Melalui sertifikasi ini, saya juga mempelajari perancangan antarmuka dan dashboard yang intuitif untuk mendukung pengalaman pengguna yang efektif dan efisien.</p>
+       </div>
+       <div class="flex flex-wrap gap-2">
+        <span data-template-id="cert2-skill-1" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(255, 77, 141); color: rgb(255, 255, 255); font-weight: 600;">UI Design</span> <span data-template-id="cert2-skill-2" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(33, 150, 243); color: rgb(255, 255, 255); font-weight: 600;">Design System</span> <span data-template-id="cert2-skill-3" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(0, 188, 212); color: rgb(255, 255, 255); font-weight: 600;">High-Fidelity Prototype</span>
+       </div>
+      </div>
+     </div>
+     <div class="flex flex-col">
+      <div class="relative bg-gray-100" style="aspect-ratio: 16/9;">
+       <div class="slider-container h-full" data-slider="">
+        <div class="slider-track h-full">
+         <img data-template-id="cert2-slide-1" class="canva-image w-full h-full object-cover" loading="lazy" src="UIUX Design Mastery (Gold Certification).png" alt="Close-up of a notebook with wireframe sketches and a smartphone on a wooden desk"> <img data-template-id="cert2-slide-2" class="canva-image w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/196645/pexels-photo-196645.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Detailed close-up of a hand-drawn wireframe design on paper for a UX project"> <img data-template-id="cert2-slide-3" class="canva-image w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/273230/pexels-photo-273230.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="A creative workspace featuring UI design plans, pencils, a smartphone, and other office tools">
+        </div><button class="slider-btn prev" onclick="slideNav(this,-1)"><i data-lucide="chevron-left" class="w-4 h-4"></i></button> <button class="slider-btn next" onclick="slideNav(this,1)"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+       </div>
+       <div class="slider-dots absolute bottom-4 left-0 right-0" data-dots=""></div>
+      </div>
+      <div class="flex gap-3 p-6 bg-white" data-thumbnails=""><img data-template-id="cert2-slide-1" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,0)" src="UIUX Design Mastery (Gold Certification).png" alt="Close-up of a notebook with wireframe sketches and a smartphone on a wooden desk"> <img data-template-id="cert2-slide-2" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,1)" src="https://images.pexels.com/photos/196645/pexels-photo-196645.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Detailed close-up of a hand-drawn wireframe design on paper for a UX project"> <img data-template-id="cert2-slide-3" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,2)" src="https://images.pexels.com/photos/273230/pexels-photo-273230.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="A creative workspace featuring UI design plans, pencils, a smartphone, and other office tools">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Cert 3 Modal -->
+  <div class="modal-overlay" id="popup-cert3" onclick="closeModalBackdrop(event)">
+   <div class="modal-content max-w-5xl" onclick="event.stopPropagation()"><button onclick="closeModal('popup-cert3')" class="absolute top-3 right-3 z-20 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition"><i data-lucide="x" class="w-4 h-4 text-gray-700"></i></button>
+    <div class="grid md:grid-cols-2 gap-0">
+     <div class="flex flex-col bg-gradient-to-br from-indigo-50 to-white">
+      <div class="bg-gradient-to-r from-teal-500 to-cyan-500 px-8 py-6">
+       <h3 data-template-id="popup-cert3-title" class="canva-text font-bold text-lg mb-1 text-white" style="color: rgb(255, 255, 255); font-weight: 700; font-size: 18px;">Learn Basic Project Management</h3>
+       <p data-template-id="popup-cert3-issuer" class="canva-text text-xs text-teal-100" style="color: rgb(255, 255, 255);">Dicoding — 2023</p>
+      </div>
+      <div class="flex-1 px-8 py-6 flex flex-col justify-between">
+       <div>
+        <p data-template-id="popup-cert3-desc" class="canva-text text-sm leading-relaxed mb-6" style="color: rgb(51, 65, 85);">Sertifikasi Dicoding (2023) memberikan pemahaman mengenai dasar-dasar manajemen proyek profesional, mencakup perencanaan (planning), pelaksanaan (execution), pemantauan (monitoring), hingga penutupan proyek (closing). Melalui sertifikasi ini, saya mempelajari koordinasi proyek lintas departemen, pengelolaan timeline, serta penyusunan dokumentasi operasional untuk mendukung keberhasilan dan efisiensi pelaksanaan proyek.</p>
+       </div>
+       <div class="flex flex-wrap gap-2">
+        <span data-template-id="cert3-skill-1" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(255, 77, 141); color: rgb(255, 255, 255); font-weight: 600;">Project Planning</span> <span data-template-id="cert3-skill-2" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(33, 150, 243); color: rgb(255, 255, 255); font-weight: 600;">Timeline Management</span> <span data-template-id="cert3-skill-3" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(0, 188, 212); color: rgb(255, 255, 255); font-weight: 600;">Stakeholder Coordination</span>
+       </div>
+      </div>
+     </div>
+     <div class="flex flex-col">
+      <div class="relative bg-gray-100" style="aspect-ratio: 16/9;">
+       <div class="slider-container h-full" data-slider="">
+        <div class="slider-track h-full">
+         <img data-template-id="cert3-slide-1" class="canva-image w-full h-full object-cover" loading="lazy" src="Learn Basic Project Management.png" alt="Team members analyze charts during a business meeting with laptops and smartphones"> <img data-template-id="cert3-slide-2" class="canva-image w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/6804093/pexels-photo-6804093.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Top-down view of an office Kanban board with colorful sticky notes for task management"> <img data-template-id="cert3-slide-3" class="canva-image w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/7376/startup-photos.jpg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="A detailed project timeline featuring design and development phases on a whiteboard with sticky notes">
+        </div><button class="slider-btn prev" onclick="slideNav(this,-1)"><i data-lucide="chevron-left" class="w-4 h-4"></i></button> <button class="slider-btn next" onclick="slideNav(this,1)"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+       </div>
+       <div class="slider-dots absolute bottom-4 left-0 right-0" data-dots=""></div>
+      </div>
+      <div class="flex gap-3 p-6 bg-white" data-thumbnails=""><img data-template-id="cert3-slide-1" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,0)" src="Learn Basic Project Management.png" alt="Team members analyze charts during a business meeting with laptops and smartphones"> <img data-template-id="cert3-slide-2" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,1)" src="https://images.pexels.com/photos/6804093/pexels-photo-6804093.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Top-down view of an office Kanban board with colorful sticky notes for task management"> <img data-template-id="cert3-slide-3" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,2)" src="https://images.pexels.com/photos/7376/startup-photos.jpg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="A detailed project timeline featuring design and development phases on a whiteboard with sticky notes">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Cert 4 Modal -->
+  <div class="modal-overlay" id="popup-cert4" onclick="closeModalBackdrop(event)">
+   <div class="modal-content max-w-5xl" onclick="event.stopPropagation()"><button onclick="closeModal('popup-cert4')" class="absolute top-3 right-3 z-20 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition"><i data-lucide="x" class="w-4 h-4 text-gray-700"></i></button>
+    <div class="grid md:grid-cols-2 gap-0">
+     <div class="flex flex-col bg-white">
+      <div class="bg-gradient-to-r from-blue-700 to-blue-900 px-8 py-7">
+       <h3 data-template-id="popup-cert4-title" class="canva-text font-bold text-lg mb-1 text-white" style="color: rgb(255, 255, 255); font-weight: 700; font-size: 18px;">Learn Basic Web Programming</h3>
+       <p data-template-id="popup-cert4-issuer" class="canva-text text-xs text-blue-100" style="color: rgb(255, 255, 255);">Dicoding — 2022</p>
+      </div>
+      <div class="flex-1 px-8 py-7 flex flex-col justify-between border-l-4 border-l-blue-700">
+       <div>
+        <p data-template-id="popup-cert4-desc" class="canva-text text-sm leading-relaxed mb-6" style="color: rgb(75, 85, 99);">Sertifikasi Dicoding (2022) membekali saya dengan dasar-dasar pemrograman web menggunakan HTML, CSS, dan JavaScript. Melalui program ini, saya mengembangkan kemampuan logical thinking dan problem solving untuk membangun solusi digital, memahami alur sistem informasi, serta mendukung pengembangan dashboard dan otomatisasi proses operasional.</p>
+       </div>
+       <div class="flex flex-wrap gap-2">
+        <span data-template-id="cert4-skill-1" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(255, 77, 141); color: rgb(255, 255, 255); font-weight: 600;">HTML/CSS</span> <span data-template-id="cert4-skill-2" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(33, 150, 243); color: rgb(255, 255, 255); font-weight: 600;">JavaScript</span> <span data-template-id="cert4-skill-3" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(0, 188, 212); color: rgb(255, 255, 255); font-weight: 600;">Web Development</span>
+       </div>
+      </div>
+     </div>
+     <div class="flex flex-col">
+      <div class="relative bg-gray-100" style="aspect-ratio: 16/9;">
+       <div class="slider-container h-full" data-slider="">
+        <div class="slider-track h-full">
+         <img data-template-id="cert4-slide-1" class="canva-image w-full h-full object-cover" loading="lazy" src="canva://MAHLfMUJ1lQ/1" alt="Colorful PHP code displayed on a dark screen, ideal for programming themes"> <img data-template-id="cert4-slide-2" class="canva-image w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/574077/pexels-photo-574077.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Person coding on a laptop with HTML code on screen, showcasing development work"> <img data-template-id="cert4-slide-3" class="canva-image w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Close-up of a computer screen displaying programming code in a dark environment">
+        </div><button class="slider-btn prev" onclick="slideNav(this,-1)"><i data-lucide="chevron-left" class="w-4 h-4"></i></button> <button class="slider-btn next" onclick="slideNav(this,1)"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+       </div>
+       <div class="slider-dots absolute bottom-4 left-0 right-0" data-dots=""></div>
+      </div>
+      <div class="flex gap-3 p-6 bg-white" data-thumbnails=""><img data-template-id="cert4-slide-1" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,0)" src="canva://MAHLfMUJ1lQ/1" alt="Colorful PHP code displayed on a dark screen, ideal for programming themes"> <img data-template-id="cert4-slide-2" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,1)" src="https://images.pexels.com/photos/574077/pexels-photo-574077.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Person coding on a laptop with HTML code on screen, showcasing development work"> <img data-template-id="cert4-slide-3" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,2)" src="https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Close-up of a computer screen displaying programming code in a dark environment">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Cert 5 Modal -->
+  <div class="modal-overlay" id="popup-cert5" onclick="closeModalBackdrop(event)">
+   <div class="modal-content max-w-5xl" onclick="event.stopPropagation()"><button onclick="closeModal('popup-cert5')" class="absolute top-3 right-3 z-20 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition"><i data-lucide="x" class="w-4 h-4 text-gray-700"></i></button>
+    <div class="grid md:grid-cols-2 gap-0">
+     <div class="flex flex-col bg-gradient-to-br from-indigo-50 to-white">
+      <div class="bg-gradient-to-r from-green-500 to-emerald-500 px-8 py-6">
+       <h3 data-template-id="popup-cert5-title" class="canva-text font-bold text-lg mb-1 text-white" style="color: rgb(255, 255, 255); font-weight: 700; font-size: 18px;">Learn Basic UX Design</h3>
+       <p data-template-id="popup-cert5-issuer" class="canva-text text-xs text-green-100" style="color: rgba(255, 255, 255, 0.667);">Dicoding — 2023</p>
+      </div>
+      <div class="flex-1 px-8 py-6 flex flex-col justify-between">
+       <div>
+        <p data-template-id="popup-cert5-desc" class="canva-text text-sm leading-relaxed mb-6" style="color: rgb(51, 65, 85);">Sertifikasi Dicoding (2023) memberikan pemahaman mengenai analisis kebutuhan pengguna melalui user persona, user journey mapping, dan information architecture. Kompetensi ini membantu saya merancang alur kerja yang lebih efektif, terstruktur, dan berorientasi pada kebutuhan pengguna.</p>
+       </div>
+       <div class="flex flex-wrap gap-2">
+        <span data-template-id="cert5-skill-1" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(255, 77, 141); color: rgb(255, 255, 255); font-weight: 600;">User Personas</span> <span data-template-id="cert5-skill-2" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(33, 150, 243); color: rgb(255, 255, 255); font-weight: 600;">User Journey</span> <span data-template-id="cert5-skill-3" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(0, 188, 212); color: rgb(255, 255, 255); font-weight: 600;">IA Design</span>
+       </div>
+      </div>
+     </div>
+     <div class="flex flex-col">
+      <div class="relative bg-gray-100" style="aspect-ratio: 16/9;">
+       <div class="slider-container h-full" data-slider="">
+        <div class="slider-track h-full">
+         <img data-template-id="cert5-slide-1" class="canva-image w-full h-full object-cover" loading="lazy" src="Learn Basic UX Design.png" alt="A focused female software engineer coding on dual monitors in a modern office"> <img data-template-id="cert5-slide-2" class="canva-image w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/3471423/pexels-photo-3471423.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="A designer sketches a mobile app prototype on paper at an office desk"> <img data-template-id="cert5-slide-3" class="canva-image w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/9454347/pexels-photo-9454347.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="A close-up of books focused on design and UX research stacked on a glass table">
+        </div><button class="slider-btn prev" onclick="slideNav(this,-1)"><i data-lucide="chevron-left" class="w-4 h-4"></i></button> <button class="slider-btn next" onclick="slideNav(this,1)"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+       </div>
+       <div class="slider-dots absolute bottom-4 left-0 right-0" data-dots=""></div>
+      </div>
+      <div class="flex gap-3 p-6 bg-white" data-thumbnails=""><img data-template-id="cert5-slide-1" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,0)" src="Learn Basic UX Design.png" alt="A focused female software engineer coding on dual monitors in a modern office"> <img data-template-id="cert5-slide-2" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,1)" src="https://images.pexels.com/photos/3471423/pexels-photo-3471423.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="A designer sketches a mobile app prototype on paper at an office desk"> <img data-template-id="cert5-slide-3" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,2)" src="https://images.pexels.com/photos/9454347/pexels-photo-9454347.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="A close-up of books focused on design and UX research stacked on a glass table">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div><!-- Cert 6 Modal -->
+  <div class="modal-overlay" id="popup-cert6" onclick="closeModalBackdrop(event)">
+   <div class="modal-content max-w-5xl" onclick="event.stopPropagation()"><button onclick="closeModal('popup-cert6')" class="absolute top-3 right-3 z-20 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition"><i data-lucide="x" class="w-4 h-4 text-gray-700"></i></button>
+    <div class="grid md:grid-cols-2 gap-0">
+     <div class="flex flex-col bg-gradient-to-br from-indigo-50 to-white">
+      <div class="bg-gradient-to-r from-purple-500 to-indigo-500 px-8 py-6">
+       <h3 data-template-id="popup-cert6-title" class="canva-text font-bold text-lg mb-1 text-white" style="color: rgb(255, 255, 255); font-weight: 700; font-size: 18px;">Getting Started with Basic Programming</h3>
+       <p data-template-id="popup-cert6-issuer" class="canva-text text-xs text-purple-100" style="color: rgba(255, 255, 255, 0.667);">Dicoding — 2023</p>
+      </div>
+      <div class="flex-1 px-8 py-6 flex flex-col justify-between">
+       <div>
+        <p data-template-id="popup-cert6-desc" class="canva-text text-sm leading-relaxed mb-6" style="color: rgb(51, 65, 85);">Sertifikasi Dicoding (2023) membekali saya dengan pemahaman fundamental pemrograman, algoritma dasar, dan logical thinking. Kompetensi ini mendukung kemampuan analisis data, pemecahan masalah secara sistematis, serta penerapan solusi yang efektif dalam lingkungan kerja modern.</p>
+       </div>
+       <div class="flex flex-wrap gap-2">
+        <span data-template-id="cert6-skill-1" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(255, 77, 141); color: rgb(255, 255, 255); font-weight: 600;">Programming Logic</span> <span data-template-id="cert6-skill-2" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(33, 150, 243); color: rgb(255, 255, 255); font-weight: 600;">Algorithms</span> <span data-template-id="cert6-skill-3" class="canva-tag px-4 py-2 rounded-full text-xs font-semibold" style="background: rgb(0, 188, 212); color: rgb(255, 255, 255); font-weight: 600;">Problem Solving</span>
+       </div>
+      </div>
+     </div>
+     <div class="flex flex-col">
+      <div class="relative bg-gray-100" style="aspect-ratio: 16/9;">
+       <div class="slider-container h-full" data-slider="">
+        <div class="slider-track h-full">
+         <img data-template-id="cert6-slide-1" class="canva-image w-full h-full object-cover" loading="lazy" src="Getting Started with Basic Programming.png" alt="A close-up shot of a person coding on a laptop"> <img data-template-id="cert6-slide-2" class="canva-image w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/1181298/pexels-photo-1181298.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Woman using laptop on sofa, surrounded by programming books, learning coding"> <img data-template-id="cert6-slide-3" class="canva-image w-full h-full object-cover" loading="lazy" src="https://images.pexels.com/photos/4709289/pexels-photo-4709289.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="A teenager focused on coding software on a desktop monitor in a home office setting">
+        </div><button class="slider-btn prev" onclick="slideNav(this,-1)"><i data-lucide="chevron-left" class="w-4 h-4"></i></button> <button class="slider-btn next" onclick="slideNav(this,1)"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+       </div>
+       <div class="slider-dots absolute bottom-4 left-0 right-0" data-dots=""></div>
+      </div>
+      <div class="flex gap-3 p-6 bg-white" data-thumbnails=""><img data-template-id="cert6-slide-1" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,0)" src="Getting Started with Basic Programming.png" alt="A close-up shot of a person coding on a laptop"> <img data-template-id="cert6-slide-2" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,1)" src="https://images.pexels.com/photos/1181298/pexels-photo-1181298.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="Woman using laptop on sofa, surrounded by programming books, learning coding"> <img data-template-id="cert6-slide-3" class="canva-image h-16 w-20 object-cover rounded cursor-pointer thumbnail-thumb" loading="lazy" onclick="goToSlideViaThumbnail(this,2)" src="https://images.pexels.com/photos/4709289/pexels-photo-4709289.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=800" alt="A teenager focused on coding software on a desktop monitor in a home office setting">
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script src="/_sdk/editing_sdk.js"></script>
+  <script>
+    lucide.createIcons();
+
+    // Fade-up observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // Modal functions
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      // Reset sliders inside this modal
+      const sliderContainer = modal.querySelector('[data-slider]');
+      if (sliderContainer) {
+        const track = sliderContainer.querySelector('.slider-track');
+        track.style.transform = 'translateX(0%)';
+        sliderContainer.dataset.current = '0';
+        updateDots(modal);
+      }
+      lucide.createIcons();
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function closeModalBackdrop(event) {
+      if (event.target === event.currentTarget) {
+        event.target.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+        document.body.style.overflow = '';
+      }
+    });
+
+    function goToSlideViaThumbnail(thumb, index) {
+      const thumbnailsContainer = thumb.closest('[data-thumbnails]');
+      const sliderContainer = thumbnailsContainer.parentElement.querySelector('[data-slider]');
+      const track = sliderContainer.querySelector('.slider-track');
+      sliderContainer.dataset.current = index;
+      track.style.transform = `translateX(-${index * 100}%)`;
+      updateDots(sliderContainer.closest('.modal-content'));
+    }
+
+    function slideNav(btn, dir) {
+      const container = btn.closest('[data-slider]');
+      const track = container.querySelector('.slider-track');
+      const total = track.children.length;
+      let current = parseInt(container.dataset.current || '0');
+      current = Math.max(0, Math.min(total - 1, current + dir));
+      container.dataset.current = current;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      updateDots(container.closest('.modal-content'));
+    }
+
+    function goToSlide(dot, index) {
+      const modal = dot.closest('.modal-content');
+      const container = modal.querySelector('[data-slider]');
+      const track = container.querySelector('.slider-track');
+      container.dataset.current = index;
+      track.style.transform = `translateX(-${index * 100}%)`;
+      updateDots(modal);
+    }
+
+    function updateDots(modal) {
+      const container = modal.querySelector('[data-slider]');
+      if (!container) return;
+      const current = parseInt(container.dataset.current || '0');
+      const dotsContainer = modal.querySelector('[data-dots]');
+      const total = container.querySelector('.slider-track').children.length;
+      dotsContainer.innerHTML = '';
+      for (let i = 0; i < total; i++) {
+        const dot = document.createElement('span');
+        dot.className = 'slider-dot' + (i === current ? ' active' : '');
+        dot.onclick = () => goToSlide(dot, i);
+        dotsContainer.appendChild(dot);
+      }
+    }
+
+    // Initialize dots for all sliders
+    document.querySelectorAll('.modal-content').forEach(modal => {
+      const slider = modal.querySelector('[data-slider]');
+      if (slider) {
+        slider.dataset.current = '0';
+        updateDots(modal);
+      }
+    });
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a05d0c4579c9a8e3',t:'MTc4MDQ3MjQwNw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body></html>
